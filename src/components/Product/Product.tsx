@@ -6,18 +6,23 @@ import {ProductType} from "../../types/entities";
 type PropsType = {
   product: ProductType
   changeProductStatus: (status: boolean) => void
+  deleteProduct: (id: number) => void
 }
 export const Product = React.memo((props: PropsType) => {
+
+  const onClickHandler = useCallback(() => {
+    props.deleteProduct(props.product.id)
+  }, [props]);
 
   const onChangeHandler = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     let newIsDoneValue = e.currentTarget.checked
     props.changeProductStatus(newIsDoneValue)
-  }, [props.changeProductStatus]);
+  }, [props]);
 
   return <div>
     <span>{`Priority ${props.product.priority} `}</span>
     <b>{props.product.name}</b>
-    <IconButton>
+    <IconButton onClick={onClickHandler}>
       <Delete/>
     </IconButton>
     <Checkbox

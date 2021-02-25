@@ -6,7 +6,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {ProductType} from "./types/entities";
 import {Product} from "./components/Product/Product";
 import {Button} from '@material-ui/core';
-import {addProductAC} from "./redux/productsReducer";
+import {addProductAC, deleteProductAC} from "./redux/productsReducer";
 
 function App() {
 
@@ -14,6 +14,7 @@ function App() {
 
   let id = 100;
   const dispatch = useDispatch();
+
   const addProduct = useCallback((title: string) => {
     let newProduct: ProductType = {
       id: id + 1,
@@ -24,8 +25,12 @@ function App() {
     dispatch(addProductAC(newProduct))
   }, [dispatch, id])
 
+  const deleteProduct = useCallback((id: number) => {
+    dispatch(deleteProductAC(id))
+  }, [dispatch, id])
+
   const changeStatus = useCallback((status: boolean) => {
-    alert(status)
+    alert(status);
   }, [])
 
   const changeFilter = useCallback((status: 'all' | 'ran out' | 'have') => {
@@ -45,7 +50,7 @@ function App() {
     <div className="App">
       <AddItemForm addItem={addProduct}/>
       {products.map(p => {
-        return <Product key={p.id} product={p} changeProductStatus={changeStatus}/>
+        return <Product key={p.id} product={p} changeProductStatus={changeStatus} deleteProduct={deleteProduct}/>
       })}
       <div style={{paddingTop: '10px'}}>
         <Button onClick={onAllClickHandler}
