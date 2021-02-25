@@ -9,13 +9,13 @@ export const initialState: initialStateType = {
     {
       id: 1,
       name: 'bread',
-      priority: 2,
+      priority: '2',
       status: "ran out"
     },
     {
       id: 2,
       name: 'milk',
-      priority: 1,
+      priority: '1',
       status: "ran out"
     },
   ]
@@ -30,7 +30,7 @@ const productsReducer = (state: initialStateType = initialState, action: Actions
         ...state,
         products: state.products.filter(c => c.id !== action.id)
       }
-    case 'CHANGE-PRODUCT':
+    case 'CHANGE-PRODUCT-STATUS':
       return {
         ...state,
         products: state.products.map(products => {
@@ -40,6 +40,21 @@ const productsReducer = (state: initialStateType = initialState, action: Actions
             return {
               ...products,
               status: action.status
+            }
+          }
+        })
+      }
+    case 'CHANGE-PRODUCT-PRIORITY':
+      debugger
+      return {
+        ...state,
+        products: state.products.map(product => {
+          if (product.id !== action.id) {
+            return product
+          } else {
+            return {
+              ...product,
+              priority: action.priority
             }
           }
         })
@@ -56,13 +71,19 @@ export default productsReducer;
 export const addProductAC = (product: ProductType) => ({type: 'ADD-PRODUCT', product} as const);
 export const deleteProductAC = (id: number) => ({type: 'DELETE-PRODUCT', id} as const);
 export const changeProductAC =
-  (id: number, status: 'all' | 'ran out' | 'have') => ({type: 'CHANGE-PRODUCT', id, status} as const);
-
+  (id: number, status: 'all' | 'ran out' | 'have') => ({type: 'CHANGE-PRODUCT-STATUS', id, status} as const);
+export const changePriorityProductAC =
+  (id: number, priority: string) => ({type: 'CHANGE-PRODUCT-PRIORITY', id, priority} as const);
 // types
 
 export type AddProductActionType = ReturnType<typeof addProductAC>;
 export type DeleteProductActionType = ReturnType<typeof deleteProductAC>;
-export type ChangeProductActionType = ReturnType<typeof changeProductAC>;
+export type ChangeStatusProductActionType = ReturnType<typeof changeProductAC>;
+export type ChangePriorityProductActionType = ReturnType<typeof changePriorityProductAC>;
 
-type ActionsType = AddProductActionType | DeleteProductActionType | ChangeProductActionType;
+type ActionsType =
+  AddProductActionType
+  | DeleteProductActionType
+  | ChangeStatusProductActionType
+  | ChangePriorityProductActionType;
 

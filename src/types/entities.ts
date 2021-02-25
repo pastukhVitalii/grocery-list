@@ -1,7 +1,7 @@
 export type ProductType = {
   id: number
   name: string
-  priority: number
+  priority: string
   status: 'all' | 'ran out' | 'have'
 }
 

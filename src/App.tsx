@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import './App.css';
 import {AddItemForm} from "./components/AddItemForm/AddItemForm";
 import {AppStateType} from "./redux/store";
@@ -6,7 +6,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {ProductType} from "./types/entities";
 import {Product} from "./components/Product/Product";
 import {Button} from '@material-ui/core';
-import {addProductAC, changeProductAC, deleteProductAC} from "./redux/productsReducer";
+import {addProductAC, changePriorityProductAC, changeProductAC, deleteProductAC} from "./redux/productsReducer";
 
 function App() {
 
@@ -30,7 +30,7 @@ function App() {
       id: id + 1,
       name: title,
       status: "ran out",
-      priority: 1
+      priority: '1'
     }
     dispatch(addProductAC(newProduct))
   }, [dispatch, id])
@@ -53,12 +53,16 @@ function App() {
     setFilterP('have')
   }, [])
 
-  console.log(filteredProducts)
+  const changePriority = useCallback((id: number, priority: string) => {
+    dispatch(changePriorityProductAC(id, priority))
+  }, [dispatch])
+
   return (
     <div className="App">
       <AddItemForm addItem={addProduct}/>
       {filteredProducts.map(p => {
-        return <Product key={p.id} product={p} changeProductStatus={changeStatus} deleteProduct={deleteProduct}/>
+        return <Product key={p.id} product={p} changeProductStatus={changeStatus} deleteProduct={deleteProduct}
+                        changeProductPriority={changePriority}/>
       })}
       <div style={{paddingTop: '10px'}}>
         <Button onClick={onAllClickHandler}
