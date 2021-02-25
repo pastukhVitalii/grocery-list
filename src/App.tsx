@@ -6,7 +6,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {ProductType} from "./types/entities";
 import {Product} from "./components/Product/Product";
 import {Button} from '@material-ui/core';
-import {addProductAC, deleteProductAC} from "./redux/productsReducer";
+import {addProductAC, changeProductAC, deleteProductAC} from "./redux/productsReducer";
 
 function App() {
 
@@ -29,8 +29,8 @@ function App() {
     dispatch(deleteProductAC(id))
   }, [dispatch, id])
 
-  const changeStatus = useCallback((status: boolean) => {
-    alert(status);
+  const changeStatus = useCallback((id: number, status: 'all' | 'ran out' | 'have') => {
+    dispatch(changeProductAC(id, status))
   }, [])
 
   const changeFilter = useCallback((status: 'all' | 'ran out' | 'have') => {

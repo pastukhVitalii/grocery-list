@@ -5,7 +5,7 @@ import {ProductType} from "../../types/entities";
 
 type PropsType = {
   product: ProductType
-  changeProductStatus: (status: boolean) => void
+  changeProductStatus: (id: number, status: 'all' | 'ran out' | 'have') => void
   deleteProduct: (id: number) => void
 }
 export const Product = React.memo((props: PropsType) => {
@@ -16,7 +16,7 @@ export const Product = React.memo((props: PropsType) => {
 
   const onChangeHandler = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     let newIsDoneValue = e.currentTarget.checked
-    props.changeProductStatus(newIsDoneValue)
+    props.changeProductStatus(props.product.id, newIsDoneValue ? 'have' : 'ran out')
   }, [props]);
 
   return <div>

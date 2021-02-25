@@ -10,7 +10,7 @@ export const initialState: initialStateType = {
       id: 1,
       name: 'bread',
       priority: 2,
-      status: 'have'
+      status: "ran out"
     },
     {
       id: 2,
@@ -30,6 +30,20 @@ const productsReducer = (state: initialStateType = initialState, action: Actions
         ...state,
         products: state.products.filter(c => c.id !== action.id)
       }
+    case 'CHANGE-PRODUCT':
+      return {
+        ...state,
+        products: state.products.map(products => {
+          if (products.id !== action.id) {
+            return products
+          } else {
+            return {
+              ...products,
+              status: action.status
+            }
+          }
+        })
+      }
     default:
       return state
   }
@@ -41,11 +55,13 @@ export default productsReducer;
 
 export const addProductAC = (product: ProductType) => ({type: 'ADD-PRODUCT', product} as const);
 export const deleteProductAC = (id: number) => ({type: 'DELETE-PRODUCT', id} as const);
+export const changeProductAC = (id: number, status: 'all' | 'ran out' | 'have') => ({type: 'CHANGE-PRODUCT', id, status} as const);
 
 // types
 
 export type AddProductActionType = ReturnType<typeof addProductAC>;
 export type DeleteProductActionType = ReturnType<typeof deleteProductAC>;
+export type ChangeProductActionType = ReturnType<typeof changeProductAC>;
 
-type ActionsType = AddProductActionType | DeleteProductActionType;
+type ActionsType = AddProductActionType | DeleteProductActionType | ChangeProductActionType;
 
