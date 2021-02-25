@@ -6,15 +6,23 @@ import {useDispatch, useSelector} from "react-redux";
 import {ProductType} from "./types/entities";
 import {Product} from "./components/Product/Product";
 import {Button} from '@material-ui/core';
+import {addProductAC} from "./redux/productsReducer";
 
 function App() {
 
   const products = useSelector<AppStateType, Array<ProductType>>(state => state.products.products);
 
+  let id = 100;
   const dispatch = useDispatch();
   const addProduct = useCallback((title: string) => {
-    alert('add')
-  }, [])
+    let newProduct: ProductType = {
+      id: id + 1,
+      name: title,
+      status: "ran out",
+      priority: 1
+    }
+    dispatch(addProductAC(newProduct))
+  }, [dispatch, id])
 
   const changeStatus = useCallback((status: boolean) => {
     alert(status)
