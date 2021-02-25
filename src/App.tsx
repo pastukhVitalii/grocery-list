@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import './App.css';
 import {AddItemForm} from "./components/AddItemForm/AddItemForm";
 import {AppStateType} from "./redux/store";
@@ -11,6 +11,16 @@ import {addProductAC, changeProductAC, deleteProductAC} from "./redux/productsRe
 function App() {
 
   const products = useSelector<AppStateType, Array<ProductType>>(state => state.products.products);
+
+  const [filterP, setFilterP] = useState<'all' | 'ran out' | 'have'>('all');
+
+  let filteredProducts = products.filter(p => {
+    if (filterP === "all") {
+      return products
+    } else {
+      return p.status === filterP
+    }
+  });
 
   let id = 100;
   const dispatch = useDispatch();
@@ -27,41 +37,44 @@ function App() {
 
   const deleteProduct = useCallback((id: number) => {
     dispatch(deleteProductAC(id))
-  }, [dispatch, id])
+  }, [dispatch])
 
   const changeStatus = useCallback((id: number, status: 'all' | 'ran out' | 'have') => {
     dispatch(changeProductAC(id, status))
-  }, [])
+  }, [dispatch])
 
-  const changeFilter = useCallback((status: 'all' | 'ran out' | 'have') => {
-    alert(status);
-  }, [])
   const onAllClickHandler = useCallback(() => {
-    changeFilter('all')
-  }, [changeFilter])
-  const onRunOutClickHandler = useCallback(() => {
-    changeFilter('ran out')
-  }, [changeFilter])
+    setFilterP('all')
+  }, [])
+  const onRanOutClickHandler = useCallback(() => {
+    setFilterP('ran out')
+  }, [])
   const onHaveClickHandler = useCallback(() => {
-    changeFilter('have')
-  }, [changeFilter])
+    setFilterP('have')
+  }, [])
 
+  console.log(filteredProducts)
   return (
     <div className="App">
       <AddItemForm addItem={addProduct}/>
-      {products.map(p => {
+      {filteredProducts.map(p => {
         return <Product key={p.id} product={p} changeProductStatus={changeStatus} deleteProduct={deleteProduct}/>
       })}
       <div style={{paddingTop: '10px'}}>
         <Button onClick={onAllClickHandler}
                 color={'default'}
+                variant={filterP === 'all' ? 'outlined' : 'text'}
         >All
         </Button>
-        <Button onClick={onRunOutClickHandler}
-                color={'primary'}>Run out
+        <Button onClick={onRanOutClickHandler}
+                color={'primary'}
+                variant={filterP === 'ran out' ? 'outlined' : 'text'}
+        >Run out
         </Button>
         <Button onClick={onHaveClickHandler}
-                color={'secondary'}>Have
+                color={'secondary'}
+                variant={filterP === 'have' ? 'outlined' : 'text'}
+        >Have
         </Button>
       </div>
     </div>

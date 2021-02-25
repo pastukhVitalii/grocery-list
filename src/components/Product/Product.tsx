@@ -18,7 +18,7 @@ export const Product = React.memo((props: PropsType) => {
     let newIsDoneValue = e.currentTarget.checked
     props.changeProductStatus(props.product.id, newIsDoneValue ? 'have' : 'ran out')
   }, [props]);
-
+  console.log(props.product.status)
   return <div>
     <span>{`Priority ${props.product.priority} `}</span>
     <b>{props.product.name}</b>

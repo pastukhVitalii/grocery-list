@@ -55,7 +55,8 @@ export default productsReducer;
 
 export const addProductAC = (product: ProductType) => ({type: 'ADD-PRODUCT', product} as const);
 export const deleteProductAC = (id: number) => ({type: 'DELETE-PRODUCT', id} as const);
-export const changeProductAC = (id: number, status: 'all' | 'ran out' | 'have') => ({type: 'CHANGE-PRODUCT', id, status} as const);
+export const changeProductAC =
+  (id: number, status: 'all' | 'ran out' | 'have') => ({type: 'CHANGE-PRODUCT', id, status} as const);
 
 // types
 
